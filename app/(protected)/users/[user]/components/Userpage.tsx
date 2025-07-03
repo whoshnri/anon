@@ -90,7 +90,7 @@ const UserPage = ({ user }: UserPageProps) => {
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .replace(/^-+|-+$/g, '');
-    const link = `http://localhost:3000/${user}/${slug}`
+    const link = `http://app-anonx.vercel.app/${user}/${slug}`
     setLink(link)
   }
 
