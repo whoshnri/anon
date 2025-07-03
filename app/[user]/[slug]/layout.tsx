@@ -11,9 +11,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(
-  { params }: { params: { user: string; slug: string } }
-): Promise<Metadata> {
+export async function generateMetadata(props: { params: Promise<{ user: string; slug: string }> }): Promise<Metadata> {
+  const params = await props.params;
   const { user, slug } = params;
 
   return {

@@ -2,13 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Gamepad2,
-  User,
-  Dice5,
-  LinkIcon,
-  Copy,
-  Send,
-  X,
   MessageCircle,
 } from 'lucide-react';
 import { useParams } from 'next/navigation';
@@ -34,7 +27,7 @@ const QPage = () => {
       body: JSON.stringify({
         user: user,
         prompt: q,
-        content: question.trim(),
+        content: question?.trim(),
       }),
     });
 
@@ -53,13 +46,14 @@ const QPage = () => {
   useEffect(() => {
 
     const slug = params?.slug
-      const unslugify = (slug: string): string => {
+      const unslugify = (slug: string)=> {
       setQ(slug
       .replace(/-/g, ' ')
       .replace(/\s+/g, ' ')
       .trim())
       };
-    unslugify(slug)
+
+      unslugify(slug as string)
 
   }, [])
 

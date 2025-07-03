@@ -1,7 +1,7 @@
 "use client";
 import { UserX } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
   const [data, setData] = useState("");
@@ -9,8 +9,7 @@ export default function Home() {
   const [status, setStatus] = useState("");
   const [loading, setloading] = useState(true);
   const [sending, setSending] = useState(false);
-
-
+  const formRef = useRef<HTMLFormElement>(null);
 
 
   useEffect(() => {
@@ -26,11 +25,11 @@ export default function Home() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      handleSubmit(e);
+       formRef.current?.requestSubmit()
     }
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true)
 
@@ -107,7 +106,7 @@ export default function Home() {
     </div>
 
     {/* Feedback Form */}
-    <form onSubmit={handleSubmit} className="w-[85%] mx-auto mt-6 bg-gray-800/50 rounded-lg p-4 border border-gray-700/30">
+    <form ref={formRef} onSubmit={handleSubmit} className="w-[85%] mx-auto mt-6 bg-gray-800/50 rounded-lg p-4 border border-gray-700/30">
         <div className="flex items-center gap-2 mb-2">
             <span className="text-green-400 text-sm">guest@anonymous:~$</span>
             <span className="text-gray-400 text-sm">[send_feedback]</span>
@@ -120,7 +119,7 @@ export default function Home() {
                 onChange={(e) => setData(e.target.value)}
                 placeholder="type your anonymous message here..."
                 className="w-full bg-transparent text-green-400 text-sm placeholder-gray-600 resize-none outline-none font-mono"
-                rows="3"
+                rows={3}
             />
             <div className="flex items-center justify-between mt-2">
                 <span className="text-gray-600 text-xs">press ctrl+enter to send</span>

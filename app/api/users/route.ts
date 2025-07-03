@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import db from '@/lib/db'; // Ensure this points to your new pg pool
+import db from '@/lib/db';
 import bcrypt from 'bcryptjs';
-import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
   const { username, password } = await req.json();
@@ -13,7 +12,6 @@ export async function POST(req: NextRequest) {
   try {
     const hash = bcrypt.hashSync(password, 10);
 
-    // Insert user
     const result = await db.query(
       'INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id, username',
       [username, hash]
@@ -21,8 +19,12 @@ export async function POST(req: NextRequest) {
 
     const newUser = result.rows[0];
     return NextResponse.json(newUser, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: 'Unknown error occurred' }, { status: 500 });
   }
 }
 
@@ -54,7 +56,6 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
 
-    // ✅ Set cookie securely
     response.cookies.set('auth_user', username, {
       httpOnly: true,
       secure: true,
@@ -64,7 +65,11 @@ export async function GET(req: NextRequest) {
     });
 
     return response;
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: 'Unknown error occurred' }, { status: 500 });
   }
 }

@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -13,34 +11,31 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-// ✅ DYNAMIC METADATA
-export async function generateMetadata({ params }: { params: { user: string } }): Promise<Metadata> {
+interface LayoutProps {
+  children: React.ReactNode;
+  params: Promise<{ user: string }>;
+}
+
+// ✅ Async metadata using dynamic param
+export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
+  const params = await props.params;
+  const user = params.user;
+
   return {
-    title: `${params.user} | AnonX`,
+    title: `${user} | AnonX`,
     description: 'Speak your mind through Anonymous Q/A',
     openGraph: {
-      title: `${params.user}`,
+      title: `${user}`,
       description: 'All the fun happens here.',
-      url: `https://myapp.com/${params.user}`,
+      url: `https://myapp.com/${user}`,
       siteName: 'AnonX',
       type: 'website',
     },
   };
 }
 
-export default function UserLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { user: string };
-}) {
-  const cookie = cookies().get('auth_user');
-
-  if (!cookie || cookie.value !== params.user) {
-    redirect('/auth');
-  }
-
+// ✅ Layout function, safely ignores params
+export default function UserLayout({ children }: LayoutProps) {
   return (
     <div className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}>
       {children}

@@ -46,64 +46,69 @@ export default function About() {
           <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[mission]</h2>
           <div className="text-gray-300 text-sm space-y-3">
             <p className="text-green-500"># Why This App Exists</p>
-            <p>Sometimes we need to share thoughts without the weight of identity. This app creates a space for honest, anonymous communication where ideas matter more than who's behind them. BTW don't compare me to NGL please!</p>
+           <p>
+  Sometimes we need to share thoughts without the weight of identity. This app creates a space for honest, anonymous communication where ideas matter more than who&apos;s behind them. BTW don&apos;t compare me to NGL please!
+</p>
 
-            <p className="text-green-500"># Core Values</p>
-            <p>Privacy first. NO ADS (yet). No tracking. No data mining. Just authentic human connection through anonymous messaging.</p>
-          </div>
-        </section>
+<p className="text-green-500"># Core Values</p>
+<p>
+  Privacy first. NO ADS (yet). No tracking. No data mining. Just authentic human connection through anonymous messaging.
+</p>
+</div>
+</section>
 
-        {/* Philosophy */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[philosophy]</h2>
-          <div className="text-gray-300 text-sm space-y-3">
-            <p className="text-green-500"># On Anonymity</p>
-            <p>"Anonymity isn't about hiding from consequences. It's about removing barriers to truth."</p>
+{/* Philosophy */}
+<section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
+  <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[philosophy]</h2>
+  <div className="text-gray-300 text-sm space-y-3">
+    <p className="text-green-500"># On Anonymity</p>
+    <p>&quot;Anonymity isn&apos;t about hiding from consequences. It&apos;s about removing barriers to truth.&quot;</p>
 
-            <p className="text-green-500"># On Technology</p>
-            <p>Simple tools solve complex problems. This app does one thing well: facilitate anonymous communication.</p>
+    <p className="text-green-500"># On Technology</p>
+    <p>Simple tools solve complex problems. This app does one thing well: facilitate anonymous communication.</p>
 
-            <p className="text-green-500"># On Community</p>
-            <p>Real connections happen when we focus on ideas, not personas. Anonymity can foster genuine understanding.</p>
-          </div>
-        </section>
+    <p className="text-green-500"># On Community</p>
+    <p>Real connections happen when we focus on ideas, not personas. Anonymity can foster genuine understanding.</p>
+  </div>
+</section>
 
-        {/* Tech Stack */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[tech_stack]</h2>
-          <div className="text-gray-300 text-sm space-y-3">
-            <p className="text-green-500"># Built With</p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <span>├─ Next.js</span>
-              <span>├─ TypeScript</span>
-              <span>├─ Tailwind CSS</span>
-              <span>├─ SQLite</span>
-              <span>└─ Daisy UI (kinda)</span>
-            </div>
+{/* Tech Stack */}
+<section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
+  <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[tech_stack]</h2>
+  <div className="text-gray-300 text-sm space-y-3">
+    <p className="text-green-500"># Built With</p>
+    <div className="grid grid-cols-2 gap-2 text-xs">
+      <span>├─ Next.js</span>
+      <span>├─ TypeScript</span>
+      <span>├─ Tailwind CSS</span>
+      <span>├─ SQLite</span>
+      <span>└─ Daisy UI (kinda)</span>
+    </div>
 
-            <p className="text-green-500"># Design Principles</p>
-            <p>Terminal aesthetics. Minimal UI. Maximum privacy. Clean code. No bloat.</p>
-          </div>
-        </section>
+    <p className="text-green-500"># Design Principles</p>
+    <p>Terminal aesthetics. Minimal UI. Maximum privacy. Clean code. No bloat.</p>
+  </div>
+</section>
 
-        {/* Contact */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[connect]</h2>
-          <div className="text-gray-300 text-sm space-y-3">
-            <p className="text-green-500"># Get In Touch</p>
-            <p>Questions, feedback, or just want to chat to the creator?</p>
+{/* Contact */}
+<section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
+  <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[connect]</h2>
+  <div className="text-gray-300 text-sm space-y-3">
+    <p className="text-green-500"># Get In Touch</p>
+    <p>Questions, feedback, or just want to chat to the creator?</p>
 
-            <div className="mt-4 space-y-2">
-              <p>Email: <span className="text-green-400">henrybassey2007@gmail.com</span></p>
-              <p>GitHub: <span className="text-green-400">@whoshnri</span></p>
-              <p>Twitter: <span className="text-green-400">@xyz_07hb</span></p>
-            </div>
+    <div className="mt-4 space-y-2">
+      <p>Email: <span className="text-green-400">henrybassey2007@gmail.com</span></p>
+      <p>GitHub: <span className="text-green-400">@whoshnri</span></p>
+      <p>Twitter: <span className="text-green-400">@xyz_07hb</span></p>
+    </div>
 
-            <p className="text-gray-500 text-xs mt-4">
-              "COYG!" - Creator
-            </p>
-          </div>
-        </section>
+    <p className="text-gray-500 text-xs mt-4">
+      &quot;COYG!&quot; - Creator
+    </p>
+  </div>
+</section>
+
 
         {/* Footer */}
         <div className="text-center pt-4">

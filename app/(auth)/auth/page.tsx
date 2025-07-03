@@ -18,35 +18,34 @@ const AuthForm = () => {
   setSubmitting(true);
   setFeedback(null);
 
-  try {
-    let res;
-    let data;
-
     if (isLogin) {
-      res = await fetch(`/api/users?username=${username}&password=${password}`, {
+      const res = await fetch(`/api/users?username=${username}&password=${password}`, {
         method: 'GET',
         next: { revalidate: 0 },
       });
-    } else {
-      res = await fetch('/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-    }
-
-    data = await res.json();
-
+      const data = await res.json();
     if (res.ok && data?.username) {
       router.push(`/users/${username}`);
     } else {
       setFeedback(data?.error || 'Authentication failed');
+      setSubmitting(false);
     }
-  } catch (err) {
-    setFeedback('Something went wrong');
-  } finally {
-    setSubmitting(false);
-  }
+    } else {
+      const res = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+    if (res.ok && data?.username) {
+      router.push(`/users/${username}`);
+    } else {
+      setFeedback(data?.error || 'Authentication failed');
+      setSubmitting(false);
+    }
+    }
+
+
 };
 
 

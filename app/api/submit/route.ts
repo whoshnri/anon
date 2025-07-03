@@ -29,11 +29,23 @@ export async function POST(req: NextRequest) {
 
     const data = await res.json();
     return NextResponse.json({ result: 'success', data });
-  } catch (err: any) {
-    console.error('Submission failed:', err);
-    return NextResponse.json(
-      { result: 'fail', error: err.message || 'Request failed' },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+  let message = 'Request failed';
+
+  if (err instanceof Error) {
+    message = err.message;
+  } else if (typeof err === 'string') {
+    message = err;
+  } else if (err && typeof err === 'object' && 'message' in err) {
+    message = String((err).message);
   }
+
+  console.error('Submission failed:', message);
+
+  return NextResponse.json(
+    { result: 'fail', error: message },
+    { status: 500 }
+  );
+}
+
 }
