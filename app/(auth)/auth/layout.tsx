@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,15 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Welcome to AnonX',
-  description: 'Speak your mind through Anonymous Q/A',
-  openGraph: {
-    title: 'Welcome to AnonX',
-    description: 'Join the fun anonymously.',
-    url: 'https://myapp.com',
-    siteName: 'AnonX',
-    type: 'website',
-  },
+  title: 'Login | AnonX',
+  description: 'Log in or Sign up to send and receive anonymous messages.',
 };
 
 
@@ -31,12 +23,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
+      <div
         className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-      </body>
-    </html>
+      </div>
   );
 }

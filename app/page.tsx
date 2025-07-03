@@ -1,103 +1,155 @@
-import Image from "next/image";
+"use client";
+import { UserX } from "lucide-react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [data, setData] = useState("");
+  const [user, setUser] = useState<string | null>(null);
+  const [status, setStatus] = useState("");
+  const [loading, setloading] = useState(true);
+  const [sending, setSending] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+
+
+
+  useEffect(() => {
+    async function fetchUser() {
+      const res = await fetch("/api/me");
+      const json = await res.json();
+      setUser(json.user);
+    }
+    fetchUser();
+    setloading(false)
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setSending(true)
+
+    const res = await fetch("/api/submit", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result = await res.json();
+    setStatus(result.result === "success" ? "[✅_Sent!]" : "[❌_failed_to_send]");
+    setSending(false)
+    setData("");
+    setTimeout(() => {
+      setStatus("");
+      }, 3000);
+  };
+
+  return (
+     <div className="relative xs:w-[90vw] xs:h-[90vh] bg-gray-900/95 h-[90vh] w-[90vw] mx-auto rounded-lg mt-[5vh] font-mono shadow-2xl border border-gray-700/50 overflow-hidden">
+      {/* Terminal top bar */}
+        <div className="p-4 rounded-t-lg flex gap-4 text-sm bg-gradient-to-r from-gray-800/80 to-gray-700/80 items-center border-b border-gray-600/30">
+          <div className="w-fit flex gap-2">
+            <div className="rounded-full bg-red-500 h-3 w-3 shadow-sm"></div>
+            <div className="rounded-full bg-yellow-500 h-3 w-3 shadow-sm"></div>
+            <div className="rounded-full bg-green-500 h-3 w-3 shadow-sm"></div>
+          </div>
+          <span className="text-gray-300 font-medium">anonymous_messages.app</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+    {/*Hero*/}
+    <div className="pb-20 pb-8 overflow-y-auto h-[90%]">
+    <div className="pt-12 pb-8 ">
+        <div className="mx-auto w-fit mb-6">
+            <div className="bg-gradient-to-br from-green-400 to-emerald-500 p-4 rounded-full shadow-lg">
+                <UserX className="w-16 h-16 stroke-black"/>
+            </div>
+        </div>
+        <p className="text-green-400 text-2xl mx-auto w-fit font-bold tracking-wide">[get_messages_anonymously]</p>
+        <p className="text-gray-400 text-sm mx-auto w-fit mt-2 max-w-md text-center">
+            Share thoughts without revealing identity. Connect authentically.
+        </p>
     </div>
+
+    <div className="w-[85%] mx-auto mt-8 bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
+        <p className="text-green-400 uppercase font-semibold mb-4 text-sm tracking-wider">[Navigate to]</p>
+        <div className="space-y-3">
+            <div className="flex items-center group">
+                <span className="text-green-500 mr-3">├─</span>
+                {loading ? <span className="w-3 h-3 border border-t-transparent border-green-400 rounded-full animate-spin"></span> : <Link href={user ? `/users/${user}` : "/auth"} className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">[my_console]</Link>}
+
+            </div>
+             <div className="flex items-center group">
+                <span className="text-green-500 mr-3">├─</span>
+                <Link href="/auth" className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">
+                    [login/signup]
+                </Link>
+            </div>
+            <div className="flex items-center group">
+                <span className="text-green-500 mr-3">├─</span>
+                <Link href="/legal" className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">
+                    [legal_stuff]
+                </Link>
+            </div>
+            <div className="flex items-center group">
+                <span className="text-green-500 mr-3">└─</span>
+                <Link href="/about" className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">
+                    [about_creator]
+                </Link>
+            </div>
+        </div>
+    </div>
+
+    {/* Feedback Form */}
+    <form onSubmit={handleSubmit} className="w-[85%] mx-auto mt-6 bg-gray-800/50 rounded-lg p-4 border border-gray-700/30">
+        <div className="flex items-center gap-2 mb-2">
+            <span className="text-green-400 text-sm">guest@anonymous:~$</span>
+            <span className="text-gray-400 text-sm">[send_feedback]</span>
+        </div>
+        <div className="bg-black/30 rounded border border-gray-600/30 p-3">
+            <textarea
+                onKeyDown={handleKeyDown}
+                required
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+                placeholder="type your anonymous message here..."
+                className="w-full bg-transparent text-green-400 text-sm placeholder-gray-600 resize-none outline-none font-mono"
+                rows="3"
+            />
+            <div className="flex items-center justify-between mt-2">
+                <span className="text-gray-600 text-xs">press ctrl+enter to send</span>
+                <button
+              type="submit"
+              disabled={sending}
+              className={`flex items-center justify-center text-green-400 hover:text-green-300 text-xs bg-gray-700/50 px-3 py-1 rounded border border-gray-600/30 transition-colors ${
+                sending ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
+              }`}
+            >
+              {sending ? (
+                <span className="w-4 h-4 border-2 border-t-transparent border-green-400 rounded-full animate-spin" />
+              ) : (
+                "[send]"
+              )}
+            </button>
+
+            </div>
+        </div>
+        <p className="text-xs mx-auto text-green-400 mt-4 w-fit">{status}</p>
+    </form>
+    </div>
+
+
+    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
+        <p className="text-gray-500 text-xs uppercase mx-auto w-fit bg-gray-800/70 px-4 py-2 rounded-full border border-gray-700/30">
+            [did_you_know?] : [anonymous_feedback_builds_trust]
+        </p>
+    </div>
+   </div>
   );
 }
