@@ -10,7 +10,7 @@ export default async function UserPage(props: PageProps) {
   const params = await props.params;
   const user = params.user;
   const authCookie = (await cookies()).get('auth_user');
-  if (!authCookie || authCookie.value !== user) {
+  if (!authCookie) {
     redirect('/auth');
   }
 
