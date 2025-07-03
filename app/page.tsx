@@ -70,7 +70,7 @@ export default function Home() {
                 <UserX className="w-16 h-16 stroke-black"/>
             </div>
         </div>
-        <p className="text-green-400 text-2xl mx-auto w-fit font-bold tracking-wide">[get_messages_anonymously]</p>
+        <p className="text-green-400 text-lg cd:text-2xl mx-auto w-fit font-bold tracking-wide">[get_messages_anonymously]</p>
         <p className="text-gray-400 text-sm mx-auto w-fit mt-2 max-w-md text-center">
             Share thoughts without revealing identity. Connect authentically.
         </p>
