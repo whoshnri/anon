@@ -17,7 +17,7 @@ export default function About() {
           <div className="rounded-full bg-yellow-500 h-3 w-3 shadow-sm"></div>
           <div className="rounded-full bg-green-500 h-3 w-3 shadow-sm"></div>
         </div>
-        <span className="text-gray-300 font-medium">about_creator.md</span>
+        <span className="text-gray-300 font-medium">creator.md</span>
         <Link href="/" className="ml-auto text-green-400 hover:text-green-300 text-xs">[back_to_app]</Link>
       </div>
 
@@ -35,7 +35,7 @@ export default function About() {
               </svg>
             </div>
             <div>
-              <h1 className="text-green-400 text-2xl font-bold uppercase tracking-wide">[creator_profile]</h1>
+              <h1 className="text-green-400 text-lg xs:text-2xl font-bold uppercase tracking-wide">[creator_profile]</h1>
               <p className="text-gray-400 text-sm">Anonymous Developer</p>
             </div>
           </div>

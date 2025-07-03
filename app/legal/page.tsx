@@ -16,7 +16,7 @@ export default function Legal() {
           <div className="rounded-full bg-yellow-500 h-3 w-3 shadow-sm"></div>
           <div className="rounded-full bg-green-500 h-3 w-3 shadow-sm"></div>
         </div>
-        <span className="text-gray-300 font-medium">legal_documents.txt</span>
+        <span className="text-gray-300 font-medium">legal.txt</span>
         <Link href="/" className="ml-auto text-green-400 hover:text-green-300 text-xs">
           [back_to_app]
         </Link>
