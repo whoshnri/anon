@@ -18,6 +18,13 @@ const AuthForm = () => {
   setSubmitting(true);
   setFeedback(null);
 
+  if (username.includes('%40') || username.includes('@')) {
+  setFeedback("Username cannot be an email address.");
+  setSubmitting(false);
+  return;
+}
+
+
     if (isLogin) {
       const res = await fetch(`/api/users?username=${username}&password=${password}`, {
         method: 'GET',

@@ -67,8 +67,10 @@ const UserPage = ({ user }: UserPageProps) => {
   const [text, setText] = useState<string>(anonymousQuestions[20].q)
 
 
+
  useEffect(() => {
   const anonymousQuestions = async (u: string) => {
+
     const res = await fetch(`/api/messages?user=${u}`);
     const data = await res.json();
     console.log(data);
@@ -79,6 +81,7 @@ const UserPage = ({ user }: UserPageProps) => {
 
   anonymousQuestions(user);
 }, [refresh, user]);
+
 
 
   useEffect(() =>{
