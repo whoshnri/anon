@@ -143,7 +143,7 @@ const UserPage = ({ user }: UserPageProps) => {
           <div className="rounded-full bg-blue-500 h-2 w-2"></div>
           <div className="rounded-full bg-green-500 h-2 w-2"></div>
         </div>
-        <span>{user}@anons_msg</span>
+        <span className="truncate">{user}@anonX</span>
         <Link href="/" className="ml-auto text-green-400 hover:text-green-300 text-xs">[back_to_app]</Link>
       </div>
 
