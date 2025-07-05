@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link'
 
+
 interface Question {
   id: number;
   q: string;
@@ -66,8 +67,6 @@ const UserPage = ({ user }: UserPageProps) => {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [text, setText] = useState<string>(anonymousQuestions[20].q)
 
-
-
  useEffect(() => {
   const anonymousQuestions = async (u: string) => {
 
@@ -93,7 +92,7 @@ const UserPage = ({ user }: UserPageProps) => {
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .replace(/^-+|-+$/g, '');
-    const link = `https://app-anonx.vercel.app/${user}/${slug}`
+    const link = `https://app-anonx.vercel.app/play/${user}/${slug}`
     setLink(link)
   }
 

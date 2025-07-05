@@ -9,6 +9,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing username or password' }, { status: 400 });
   }
 
+  try{
+    const result = await db.query('SELECT * FROM users WHERE username = $1', [username]);
+    const user = result.rows[0];
+
+
+    if (user) {
+      return NextResponse.json({ error: 'User already exists' }, { status: 403 });
+    }
+
+  }catch (error) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ error: 'Unknown error occurred' }, { status: 500 });
+  }
+
+
   try {
     const hash = bcrypt.hashSync(password, 10);
 
@@ -41,10 +59,10 @@ export async function GET(req: NextRequest) {
     const result = await db.query('SELECT * FROM users WHERE username = $1', [username]);
     const user = result.rows[0];
 
+
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
-
     const isMatch = bcrypt.compareSync(password, user.password);
 
     if (!isMatch) {

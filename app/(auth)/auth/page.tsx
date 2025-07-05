@@ -19,41 +19,44 @@ const AuthForm = () => {
   setFeedback(null);
 
   if (username.includes('%40') || username.includes('@')) {
-  setFeedback("Username cannot be an email address.");
-  setSubmitting(false);
-  return;
-}
+    setFeedback("Username cannot be an email address.");
+    setSubmitting(false);
+    return;
+  }
 
+  try {
+    let res:Response
 
     if (isLogin) {
-      const res = await fetch(`/api/users?username=${username}&password=${password}`, {
+     res = await fetch(`/api/user?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
         method: 'GET',
         next: { revalidate: 0 },
       });
-      const data = await res.json();
-    if (res.ok && data?.username) {
-      router.push(`/users/${username}`);
     } else {
-      setFeedback(data?.error || 'Authentication failed');
-      setSubmitting(false);
-    }
-    } else {
-      const res = await fetch('/api/users', {
+      res = await fetch('/api/user', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
+    }
+
+    const data = await res.json();
+
     if (res.ok && data?.username) {
       router.push(`/users/${username}`);
     } else {
       setFeedback(data?.error || 'Authentication failed');
       setSubmitting(false);
     }
+  } catch (error) {
+    if(error instanceof Error ){
+      console.error('Submission Error:', error);
+      setFeedback("Something went wrong. Please try again.");
+      setSubmitting(false);
     }
-
-
+  }
 };
+
 
 
   return (
@@ -65,7 +68,7 @@ const AuthForm = () => {
             <div className="rounded-full bg-blue-500 h-2 w-2"></div>
             <div className="rounded-full bg-green-500 h-2 w-2"></div>
           </div>
-          <span>{isLogin ? "welcome_back" : "new_user"}@anons_msg</span>
+          <span>{isLogin ? "welcome" : "new"}@anonx</span>
         </div>
       <form
         onSubmit={handleSubmit}

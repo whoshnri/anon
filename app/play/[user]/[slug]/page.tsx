@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import {
   MessageCircle,
 } from 'lucide-react';
-import { useParams } from 'next/navigation';
+import { useParams} from 'next/navigation';
 import Link from "next/link"
 
 
@@ -18,6 +18,7 @@ const QPage = () => {
   const [errors, setErrors] = useState<string>()
   const [submit, submitting] = useState<boolean>(false)
   const user = params?.user;
+
 
 
   const sendMessages = async() => {
