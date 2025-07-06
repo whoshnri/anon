@@ -25,7 +25,7 @@ export default function NotFound() {
       <div className="h-full w-full flex flex-col justify-center items-center text-center px-4 text-white">
         <h1 className="text-3xl font-bold mb-2">[404]</h1>
         <p className="text-gray-400 mb-4">
-          [the_user_or_page_you&apos;re_looking_for_doesn&apos;t_exist]
+          [user_or_page_doesn&apos;t_exist]
         </p>
         <Link
           href="/"
