@@ -12,6 +12,7 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import Link from 'next/link'
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 
 interface Question {
@@ -58,7 +59,19 @@ interface UserPageProps {
 
 
 const UserPage = ({ user }: UserPageProps) => {
-  const [home, setHome] = useState(true);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const currentView = searchParams.get('view') || 'home';
+  const home = currentView === 'home';
+
+  const setView = (view: 'home' | 'archives') => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', view);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const [refresh, setRefresh] = useState(true);
   const [copied, setCopied] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -67,37 +80,37 @@ const UserPage = ({ user }: UserPageProps) => {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [text, setText] = useState<string>(anonymousQuestions[20].q)
 
- useEffect(() => {
-  const anonymousQuestions = async (u: string) => {
+  useEffect(() => {
+    const anonymousQuestions = async (u: string) => {
 
-    const res = await fetch(`/api/messages?user=${u}`);
-    const data = await res.json();
-    console.log(data);
-    if (data) {
-      setMessages(data);
-    }
-  };
+      const res = await fetch(`/api/messages?user=${u}`);
+      const data = await res.json();
+      console.log(data);
+      if (data) {
+        setMessages(data);
+      }
+    };
 
-  anonymousQuestions(user);
-}, [refresh, user]);
+    anonymousQuestions(user);
+  }, [refresh, user]);
 
 
 
-  useEffect(() =>{
-    const getLink = (text: string)=> {
-    const slug = text
+  useEffect(() => {
+    const getLink = (text: string) => {
+      const slug = text
         .toLowerCase()
         .trim()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-')
         .replace(/^-+|-+$/g, '');
-    const link = `https://app-anonx.vercel.app/play/${user}/${slug}`
-    setLink(link)
-  }
+      const link = `https://app-anonx.vercel.app/play/${user}/${slug}`
+      setLink(link)
+    }
 
-  getLink(text)
-  },[text])
+    getLink(text)
+  }, [text])
 
   const getText = () => {
     const randomIndex = Math.floor(Math.random() * anonymousQuestions.length);
@@ -124,223 +137,226 @@ const UserPage = ({ user }: UserPageProps) => {
     }
   };
 
-  const openMessage = (message:Message) => {
-        setSelectedMessage(message);
-    };
+  const openMessage = (message: Message) => {
+    setSelectedMessage(message);
+  };
 
   const closeMessage = () => {
     setSelectedMessage(null);
-    };
+  };
 
 
 
   return (
-    <div className="relative xs:w-[90vw] xs:h-[90vh] bg-gray-900/90 h-[90vh] w-[90vw] mx-auto rounded-sm mt-[5vh] font-mono  rounded-lg">
-      {/* Terminal top bar */}
-      <div className="p-3 rounded-t-lg flex gap-4 text-xs bg-white/10 items-center">
-        <div className="w-fit flex gap-1">
-          <div className="rounded-full bg-red-500 h-2 w-2"></div>
-          <div className="rounded-full bg-blue-500 h-2 w-2"></div>
-          <div className="rounded-full bg-green-500 h-2 w-2"></div>
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 md:p-8">
+      {/* Background Decorative Elements */}
+      {/* <div className="absolute top-1/3 -left-20 w-72 h-72 bg-brand-green/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/3 -right-20 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} /> */}
+
+      <div className="relative w-full max-w-2xl glass-card-heavy sm:rounded-3xl shadow-2xl overflow-hidden border border-white/10 flex flex-col min-h-[500px] md:min-h-[600px] my-4">
+        {/* Modern Top bar */}
+        <div className="px-6 py-4 flex justify-between items-center border-b border-white/5 bg-white/5">
+          <div className="flex gap-2">
+            <div className="h-2 w-2 rounded-full bg-white/20" />
+            <div className="h-2 w-2 rounded-full bg-white/10" />
+          </div>
+          <span className="text-[10px] font-mono tracking-widest text-white/40 uppercase items-center flex gap-2">
+            <div className="w-1.5 h-1.5 bg-brand-green rounded-full shadow-[0_0_8px_rgba(74,222,128,0.5)]" />
+            Logged in as {user}
+          </span>
+          <Link href="/" className="text-[10px] font-semibold text-brand-green hover:text-white transition-colors uppercase tracking-widest">
+            Logout
+          </Link>
         </div>
-        <span className="truncate">{user}@anonX</span>
-        <Link href="/" className="ml-auto text-green-400 hover:text-green-300 text-xs">[back_to_app]</Link>
-      </div>
 
-      {/* Main Content */}
-      {home && (
-        <>
-          {/* Boot message */}
-          <div className="font-mono p-3 text-xs text-green-400/70 leading-relaxed">
-            <p>&gt; Initializing anonymous protocols 1011.3e4</p>
-
-            <p className="ml-8">&gt; You&apos;re all set <span className="font-bold text-white">{user}</span></p>
-
-          </div>
-
-          {/* Avatar */}
-          <div className="flex justify-center mt-8 mb-3">
-            <div className="w-20 h-20 border-2 border-green-400/50 rounded-full flex items-center justify-center bg-gray-900/50 backdrop-blur-sm animate-pulse">
-              <User className="w-10 h-10 text-green-400" />
-            </div>
-          </div>
-
-          {/* Question */}
-          <div className="relative bg-gray-900/50 border border-green-400/30 rounded-lg px-2 py-1 mb-8 w-[80%] mx-auto">
-            <div className="text-green-400/70 text-xs mb-3 items-center grid grid-rows-2">
-              <p
-              className="uppercase">[QUERY_LOADED] - {
-                editing ?
-                <span className="cursor-pointer hover:underline"
-                 onClick={()=>{setEditing(!editing)}}>
-                [click_to_save]</span> :
-                <span className="cursor-pointer hover:underline"
-                onClick={()=>{setEditing(!editing)}}>
-                [click_to_edit]</span>
-              }
-              </p>
-              {
-                editing ? <input type="text" className="text-lg font-sans font-bold text-white border border-green-400/30 mr-8 p-1 rounded-lg focus:outline-none" value={text} onChange={(e) => setText(e.target.value)} /> :
-                <p className="text-lg font-sans font-bold text-white focus:outline-none">{text}</p>
-              }
-            </div>
-            <button
-              onClick={getText}
-              className="cursor-pointer absolute bottom-1 right-1 w-6 h-6 border border-green-400/50 rounded-lg flex items-center justify-center bg-gray-900/50 hover:bg-green-400/10 transition-colors group"
-              aria-label="Get next question"
-            >
-              <Dice5 className="w-5 h-5 text-green-400 group-hover:rotate-180 transition-transform duration-300" />
-            </button>
-          </div>
-
-          {/* Share Link */}
-          <div className="space-y-1 w-[80%] mx-auto">
-            <div className="text-green-400/70 text-xs flex items-center gap-2">
-              <span>[SHARE_LINK]</span>
-              <LinkIcon className="w-3 h-3" />
+        {/* Main Content */}
+        {home && (
+          <>
+            {/* Simple Status */}
+            <div className="p-4 text-xs text-white/60 font-medium">
+              Welcome back, <span className="text-white">{user}</span>. Your link is active.
             </div>
 
-            <div className="bg-gray-900/50 border border-green-400/30 rounded-lg p-4 flex items-center justify-between group hover:border-green-400/50 transition-colors">
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-2 h-2 animate-pulse bg-green-400 rounded-full" />
-                <code className="text-green-400/90 text-xs truncate">{link}</code>
+            {/* Avatar */}
+            <div className="flex justify-center mt-8 mb-3">
+              <div className="w-20 h-20 border-2 border-green-400/50 rounded-full flex items-center justify-center bg-gray-900/50 backdrop-blur-sm animate-pulse">
+                <User className="w-10 h-10 text-green-400" />
               </div>
+            </div>
 
+            {/* Question */}
+            <div className="relative bg-gray-900/50 border border-green-400/30 rounded px-2 py-1 mb-8 w-[80%] mx-auto">
+              <div className="text-white/40 text-[10px] mb-3 items-center grid grid-rows-2 uppercase tracking-widest font-bold">
+                <p>
+                  Current Question - {
+                    editing ?
+                      <span className="cursor-pointer text-brand-green hover:underline"
+                        onClick={() => { setEditing(!editing) }}>
+                        Save</span> :
+                      <span className="cursor-pointer text-brand-green hover:underline"
+                        onClick={() => { setEditing(!editing) }}>
+                        Edit</span>
+                  }
+                </p>
+                {
+                  editing ? <input type="text" className="text-lg font-sans font-bold text-white border-b border-brand-green/30 mr-8 py-1 focus:outline-none bg-transparent" value={text} onChange={(e) => setText(e.target.value)} /> :
+                    <p className="text-lg font-sans font-bold text-white">{text}</p>
+                }
+              </div>
               <button
-                onClick={handleCopy}
-                className="ml-3 p-2 border border-green-400/30 rounded-md hover:border-green-400/60 cursor-pointer hover:bg-green-400/10 transition-colors"
-                aria-label="Copy link to clipboard"
+                onClick={getText}
+                className="cursor-pointer absolute bottom-1 right-1 w-6 h-6 border border-green-400/50 rounded-lg flex items-center justify-center bg-gray-900/50 hover:bg-green-400/10 transition-colors group"
+                aria-label="Get next question"
               >
-                <Copy className="w-4 h-4 text-green-400" />
+                <Dice5 className="w-5 h-5 text-green-400 group-hover:rotate-180 transition-transform duration-300" />
               </button>
             </div>
 
-            {copied && (
-              <div className="text-green-400 text-xs flex items-center gap-2 justify-center">
-                <span>[COPIED_TO_CLIPBOARD]</span>
-                <div className="w-2 h-2 bg-green-400 rounded-full" />
+            <div className="space-y-1 w-[80%] mx-auto">
+              <div className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                Share your link
               </div>
-            )}
-          </div>
-        </>
-      )}
+
+              <div className="bg-gray-900/50 border border-green-400/30 rounded p-4 flex items-center justify-between group hover:border-green-400/50 transition-colors">
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-2 h-2 animate-pulse bg-green-400 rounded-full" />
+                  <code className="text-green-400/90 text-xs truncate">{link}</code>
+                </div>
+
+                <button
+                  onClick={handleCopy}
+                  className="ml-3 p-2 border border-green-400/30 rounded-md hover:border-green-400/60 cursor-pointer hover:bg-green-400/10 transition-colors"
+                  aria-label="Copy link to clipboard"
+                >
+                  <Copy className="w-4 h-4 text-green-400" />
+                </button>
+              </div>
+
+              {copied && (
+                <div className="text-brand-green text-[10px] font-bold tracking-widest uppercase text-center">
+                  Copied!
+                </div>
+              )}
+            </div>
+          </>
+        )}
 
         {!home && (
-  <>
-    {/* messages Content */}
-    <div className="p-6 h-full overflow-hidden pb-20">
-      {/* Header */}
-      <div className="font-mono text-xs text-green-400/70 leading-relaxed mb-6">
-        <p>{'>'} Loading message archive...</p>
-        <p className="ml-8">
-          {'>'} Found {messages?.length} anonymous messages
-        </p>
-      </div>
+          <div className="p-8 md:p-10 space-y-8 animate-fade-in h-full flex flex-col">
+            {/* Archive Header */}
+            <div className="flex justify-between items-end">
+              <div className="space-y-1">
+                <h2 className="text-2xl font-bold text-white tracking-tight">Messages</h2>
+                <p className="text-[10px] font-mono text-white/30 uppercase tracking-[0.2em]">Your anonymous messages</p>
+              </div>
+              <button
+                onClick={() => setRefresh(!refresh)}
+                className="px-4 py-2 rounded-xl glass-card text-[10px] font-mono text-brand-green hover:bg-brand-green/10 transition-all uppercase tracking-widest cursor-pointer"
+              >
+                Refresh
+              </button>
+            </div>
 
-      {/* Messages List */}
-        <div className="flex justify-between text-green-400/70 text-xs flex items-center gap-2 mb-4 mr-4">
-          <span className="flex gap-2">[MESSAGE_ARCHIVE] <MessageCircle className="w-3 h-3" /></span>
-          <span onClick={() => setRefresh(!refresh)}
-           className="cursor-pointer hover:underline">[refresh]</span>
-
-        </div>
-        {
-          !(messages.length > 0) &&
-            <p
-            className="bg-gray-900/50 border border-green-400/30 rounded-lg p-4 cursor-pointer hover:border-green-400/50 text-green-400/60 hover:bg-gray-900/70 transition-colors group"
-          >Nothing here yet!</p>
-        }
-        <div className="overflow-y-auto h-[85%] space-y-3 pb-8">
-        {messages.length > 0 && messages.map((message) => (
-          <div
-            key={message.id}
-            onClick={() => openMessage(message)}
-            className="bg-gray-900/50 border border-green-400/30 rounded-lg p-2 cursor-pointer hover:border-green-400/50 hover:bg-gray-900/70 transition-colors group"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 animate-pulse bg-green-400 rounded-full" />
-                  <span className="text-green-400/70 text-xs">MSG_{message.id.toString().padStart(3, '0')}</span>
-                  <span className="text-green-400/50 truncate text-xs">{message.timestamp}</span>
+            <div className="flex-1 overflow-y-auto space-y-4 pr-1">
+              {messages.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-48 glass-card rounded-xl border-dashed border-white/10 opacity-50">
+                  <MessageCircle className="w-8 h-8 mb-4 text-white/20" />
+                  <p className="text-xs font-mono uppercase tracking-widest">No messages yet</p>
                 </div>
-                <p className="text-green-400 underline text-xs leading-relaxed uppercase line-clamp-2 mb-3">
-                  [{message.prompt}]
-                </p>
-                <p className="text-white text-xs leading-relaxed truncate">
-                  RE: {message.content}
-                </p>
-              </div>
-              <div className="text-green-400/50 group-hover:text-green-400/70 transition-colors">
-                <span className="text-xs">[CLICK]</span>
-              </div>
-            </div>
-          </div>
-        ))}
-          </div>
-
-
-    </div>
-
-
-    {/* Message Popup */}
-    {selectedMessage && (
-      <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div className="bg-gray-900 border border-green-400/50 rounded-lg p-6 max-w-md w-[90%] relative">
-          {/* Close Button */}
-          <button
-            onClick={closeMessage}
-            className="absolute top-4 right-4 p-2 border border-green-400/30 rounded-md cursor-pointer hover:border-green-400/60 hover:bg-green-400/10 transition-colors"
-            aria-label="Close message"
-          >
-            <X className="w-4 h-4 text-green-400" />
-          </button>
-
-          {/* Message Header */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-2 animate-pulse h-2 bg-green-400 rounded-full" />
-              <span className="text-green-400/70 text-xs">MSG_{selectedMessage.id.toString().padStart(3, '0')}</span>
-              <span className="text-green-400/50 text-xs">{selectedMessage.timestamp}</span>
-            </div>
-            <div className="text-green-400/70 text-sm font-mono">
-              [MESSAGE_PREVIEW]
-            </div>
-          </div>
-
-          {/* Message Content */}
-            <p className="text-green-400 underline text-xs leading-relaxed uppercase mb-3">
-                  [{selectedMessage.prompt}]
-                </p>
-              <div className="text-white text-sm leading-relaxed whitespace-pre-wrap font-sans">
-                {selectedMessage.content}
-              </div>
+              ) : (
+                messages.map((message) => (
+                  <div
+                    key={message.id}
+                    onClick={() => openMessage(message)}
+                    className="glass-card rounded p-4 md:p-6 border border-white/5 hover:border-brand-green/30 hover:bg-white/5 transition-all cursor-pointer group"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="space-y-3 flex-1 min-w-0">
+                        <div className="grid grid-rows-2 gap-3">
+                          <span className="text-[10px] w-fit font-mono text-brand-green/60 px-2 py-0.5 rounded-full bg-brand-green/5 border border-brand-green/20 uppercase">
+                            #{message.id.toString().padStart(3, '0')}
+                          </span>
+                          <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest">{message.timestamp}</span>
+                        </div>
+                        <p className="text-xs font-bold text-white/40 uppercase tracking-widest truncate">
+                          Prompt: {message.prompt}
+                        </p>
+                        <p className="text-sm text-white/80 line-clamp-2 leading-relaxed">
+                          {message.content}
+                        </p>
+                      </div>
+                      <div className="self-center">
+                        <div className="p-2 rounded-full glass-card group-hover:border-brand-green/50 transition-colors">
+                          <Send className="w-3 h-3 text-brand-green/50 group-hover:text-brand-green" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         )}
-      </>
-    )}
+        {/* Navigation Floating Pill - Sticky at bottom of container */}
+        <div className="fixed bottom-0 left-0 right-0 p-6 flex justify-center bg-linear-to-t from-bg-dark/80 to-transparent pointer-events-none">
+          <div className="glass-card-heavy rounded-2xl p-1.5 flex items-center gap-1 border border-white/10 shadow-2xl backdrop-blur-2xl pointer-events-auto max-w-[280px] w-full">
+            <button
+              onClick={() => setView('home')}
+              className={`flex-1 py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 group ${home ? 'bg-brand-green text-bg-dark font-bold shadow-[0_0_20px_rgba(74,222,128,0.3)]' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+            >
+              <Gamepad2 className="w-4 h-4" />
+              <span className="text-[10px] uppercase tracking-widest">Home</span>
+            </button>
 
-
-
-      {/* Bottom menu */}
-      <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2">
-        <div className="bg-gray-900/90 backdrop-blur-sm border border-green-400/30 rounded-full p-2 flex items-center gap-2">
-          <button
-          onClick={() => setHome(true)}
-          className={`${home && 'bg-white/10'} p-3 cursor-pointer rounded-full transition-colors group" aria-label="Games`}>
-            <Gamepad2 className="w-5 h-5 text-green-400/70 group-hover:text-green-400" />
-          </button>
-
-          <div className="w-px h-6 bg-green-400/30" />
-
-          <button
-          onClick={() => setHome(false)}
-          className={`${!home && 'bg-white/10'} p-3 cursor-pointer rounded-full transition-colors group`} aria-label="Send message">
-            <Send className="w-5 h-5 text-green-400/70 group-hover:text-green-400" />
-          </button>
+            <button
+              onClick={() => setView('archives')}
+              className={`flex-1 py-3 px-4 rounded-xl transition-all flex items-center justify-center gap-2 group ${!home ? 'bg-brand-green text-bg-dark font-bold shadow-[0_0_20px_rgba(74,222,128,0.3)]' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+            >
+              <Send className="w-4 h-4" />
+              <span className="text-[10px] uppercase tracking-widest">Messages</span>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Popups and Overlays */}
+      {selectedMessage && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="relative w-full max-w-lg glass-card-heavy rounded-3xl border border-white/10 shadow-2xl p-8 md:p-10 animate-scale-in">
+            <button
+              onClick={closeMessage}
+              className="absolute top-6 right-6 p-2 rounded-xl glass-card hover:bg-white/5 transition-all text-white/50 hover:text-white cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-6">
+              <div className="grid grid-rows-2 gap-3">
+                <span className="text-[10px] w-fit font-mono text-brand-green bg-brand-green/10 px-3 py-1 rounded-full border border-brand-green/20 uppercase tracking-widest">
+                  Message #{selectedMessage.id}
+                </span>
+                <span className="text-[10px] font-mono text-white/20 uppercase tracking-widest">{selectedMessage.timestamp}</span>
+              </div>
+
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <p className="text-[10px] font-mono text-white/20 uppercase tracking-widest ml-1">Context</p>
+                  <p className="text-xs font-bold text-brand-green uppercase tracking-wide px-4 py-3 rounded-2xl glass-card border border-brand-green/10">
+                    {selectedMessage.prompt}
+                  </p>
+                </div>
+
+                <div className="space-y-1 pt-4">
+                  <p className="text-[10px] font-mono text-white/20 uppercase tracking-widest ml-1">Message Content</p>
+                  <div className="text-base md:text-lg text-white leading-relaxed font-sans px-1">
+                    {selectedMessage.content}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

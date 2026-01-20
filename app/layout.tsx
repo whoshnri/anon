@@ -33,8 +33,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`dark ${geistSans.variable} ${geistMono.variable} antialiased bg-bg-dark min-h-screen selection:bg-brand-green/30 selection:text-brand-green overflow-x-hidden`}
       >
+        <div className="fixed inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(74,222,128,0.05),transparent_50%)] pointer-events-none" />
         {children}
       </body>
     </html>

@@ -1,6 +1,7 @@
 // app/api/messages/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
+import { encryptMessage, decryptMessage } from '@/lib/crypto';
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,7 +17,13 @@ export async function GET(req: NextRequest) {
       [user]
     );
 
-    return NextResponse.json(result.rows);
+    // Decrypt messages before sending to client
+    const decryptedMessages = result.rows.map(msg => ({
+      ...msg,
+      content: decryptMessage(msg.content)
+    }));
+
+    return NextResponse.json(decryptedMessages);
   } catch (error) {
     console.error('GET /api/messages error:', error);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
@@ -32,6 +39,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // Encrypt the content before saving to database
+    const encryptedContent = encryptMessage(content);
+
     const ip = req.headers.get('x-forwarded-for') || 'unknown';
     const timestamp = new Date().toISOString();
 
@@ -39,7 +49,7 @@ export async function POST(req: NextRequest) {
       `INSERT INTO messages ("user", prompt, content, ip, timestamp)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id`,
-      [user, prompt || '', content, ip, timestamp]
+      [user, prompt || '', encryptedContent, ip, timestamp]
     );
 
     return NextResponse.json({ success: true, id: result.rows[0].id });

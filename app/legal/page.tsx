@@ -8,90 +8,77 @@ export const metadata: Metadata = {
 
 export default function Legal() {
   return (
-    <div className="relative xs:w-[90vw] xs:h-[90vh] bg-gray-900/95 h-[90vh] w-[90vw] mx-auto rounded-lg mt-[5vh] font-mono shadow-2xl border border-gray-700/50 overflow-hidden">
-      {/* Terminal top bar */}
-      <div className="p-4 rounded-t-lg flex gap-4 text-sm bg-gradient-to-r from-gray-800/80 to-gray-700/80 items-center border-b border-gray-600/30 sticky top-0">
-        <div className="w-fit flex gap-2">
-          <div className="rounded-full bg-red-500 h-3 w-3 shadow-sm"></div>
-          <div className="rounded-full bg-yellow-500 h-3 w-3 shadow-sm"></div>
-          <div className="rounded-full bg-green-500 h-3 w-3 shadow-sm"></div>
+    <div className="relative min-h-screen flex items-center justify-center p-4 md:p-8">
+
+
+      <div className="relative w-full max-w-3xl glass-card-heavy sm:rounded-3xl shadow-2xl overflow-hidden border border-white/10 flex flex-col my-8">
+        {/* Modern Top bar */}
+        <div className="px-6 py-4 flex justify-between items-center border-b border-white/5 bg-white/5 sticky top-0 z-10">
+          <div className="flex gap-2">
+            <div className="h-2 w-2 rounded-full bg-white/20" />
+            <div className="h-2 w-2 rounded-full bg-white/10" />
+          </div>
+          <span className="text-[10px] font-mono tracking-widest text-white/40 uppercase">Legal Information</span>
+          <Link href="/" className="text-[10px] font-semibold text-brand-green hover:text-white transition-colors uppercase tracking-widest">
+            Back
+          </Link>
         </div>
-        <span className="text-gray-300 font-medium">legal.txt</span>
-        <Link href="/" className="ml-auto text-green-400 hover:text-green-300 text-xs">
-          [back_to_app]
-        </Link>
-      </div>
 
-      <div className="p-8 space-y-8 overflow-y-auto h-[90%]">
-        {/* Privacy Policy */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">
-            [privacy_policy]
-          </h2>
-          <div className="text-gray-300 text-sm space-y-3">
-            <p className="text-green-500"># Data Collection</p>
-            <p>We collect minimal data: email for account creation, messages you send/receive.</p>
-
-            <p className="text-green-500"># Data Usage</p>
-            <p>Your data is used solely for app functionality. We don&apos;t sell or share personal information.</p>
-
-            <p className="text-green-500"># Data Storage</p>
-            <p>Messages are encrypted. Data stored securely on our servers. You can delete your account anytime.</p>
-
-            <p className="text-green-500"># Your Rights</p>
-            <p>Access, modify, or delete your data by contacting us. Data deletion is permanent.</p>
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-10">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight text-white uppercase">Legal Info</h1>
+            <p className="text-xs font-mono text-brand-green/60 uppercase tracking-widest underline decoration-brand-green/20 underline-offset-8">Privacy & Terms</p>
           </div>
-        </section>
 
-        {/* Cookie Policy */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[cookie_policy]</h2>
-          <div className="text-gray-300 text-sm space-y-3">
-            <p className="text-green-500"># Essential Cookies</p>
-            <p>We use necessary cookies for login sessions and app functionality.</p>
+          <div className="grid grid-cols-1 gap-6">
+            {/* Privacy Section */}
+            <section className="glass-card rounded-2xl p-6 md:p-8 border border-white/5 space-y-6">
+              <h2 className="text-xs font-bold text-white uppercase tracking-[0.2em] opacity-40">Privacy Policy</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-400 leading-relaxed">
+                <div className="space-y-2">
+                  <p className="text-brand-green/60 font-mono text-[10px] uppercase"># Data Collection</p>
+                  <p>We collect minimal data: account alias and transmissions you choose to host.</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-brand-green/60 font-mono text-[10px] uppercase"># Usage</p>
+                  <p>Transmissions are for your eyes only. We do not aggregate or distribute your communications.</p>
+                </div>
+              </div>
+            </section>
 
-            <p className="text-green-500"># No Tracking</p>
-            <p>No analytics, advertising, or tracking cookies. Your browsing stays private.</p>
+            {/* Terms Section */}
+            <section className="glass-card rounded-2xl p-6 md:p-8 border border-white/5 space-y-6">
+              <h2 className="text-xs font-bold text-white uppercase tracking-[0.2em] opacity-40">Terms of Operation</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-400 leading-relaxed">
+                <div className="space-y-2">
+                  <p className="text-brand-green/60 font-mono text-[10px] uppercase"># Acceptable Use</p>
+                  <p>No harassment or toxic transmissions. Anonymity level: High. Integrity level: Mandatory.</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-brand-green/60 font-mono text-[10px] uppercase"># Responsibility</p>
+                  <p>Operators are responsible for their transmitted content. Service provided &ldquo;as is&rdquo;.</p>
+                </div>
+              </div>
+            </section>
 
-            <p className="text-green-500"># Cookie Control</p>
-            <p>Disable cookies in browser settings, but app functionality may be limited.</p>
+            {/* Contact Section */}
+            <section className="glass-card rounded-2xl p-6 md:p-8 border border-brand-green/20 bg-brand-green/5 space-y-4">
+              <h2 className="text-xs font-bold text-brand-green uppercase tracking-[0.2em]">Contact</h2>
+              <div className="text-sm text-gray-300">
+                <p>Inquiries regarding protocols: <span className="text-white font-mono">henrybassey2007@gmail.com</span></p>
+                <p className="text-[10px] text-white/20 mt-4 uppercase tracking-widest font-mono">Last updated: {new Date().toLocaleDateString()}</p>
+              </div>
+            </section>
           </div>
-        </section>
 
-        {/* Terms and Conditions */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">
-            [terms_and_conditions]
-          </h2>
-          <div className="text-gray-300 text-sm space-y-3">
-            <p className="text-green-500"># Acceptable Use</p>
-            <p>No harassment, spam, illegal content, or abuse. Be respectful in anonymous interactions.</p>
-
-            <p className="text-green-500"># Service Availability</p>
-            <p>Service provided &quot;as is&quot;. We may modify or discontinue features with notice.</p>
-
-            <p className="text-green-500"># User Responsibility</p>
-            <p>You&apos;re responsible for your messages and account security. Keep login details safe.</p>
-
-            <p className="text-green-500"># Limitation of Liability</p>
-            <p>We&apos;re not liable for user-generated content or service interruptions.</p>
-
-            <p className="text-green-500"># Termination</p>
-            <p>We may suspend accounts for policy violations. You can delete your account anytime.</p>
-          </div>
-        </section>
-
-        {/* Contact */}
-        <section className="bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-          <h2 className="text-green-400 text-xl font-bold mb-4 uppercase tracking-wide">[contact]</h2>
-          <div className="text-gray-300 text-sm">
-            <p className="text-green-500"># Questions or Concerns?</p>
-            <p>
-              Email us at: <span className="text-green-400">henrybassey2007@gmail.com</span>
+          {/* Footer Footer */}
+          <div className="text-center pt-10 border-t border-white/5 pb-6">
+            <p className="text-[10px] font-mono text-white/20 uppercase tracking-[0.4em]">
+              Stay Secure • Stay Anonymous • {new Date().getFullYear()}
             </p>
-            <p className="text-gray-500 text-xs mt-2">Last updated: {new Date().toLocaleDateString()}</p>
           </div>
-        </section>
+        </div>
       </div>
     </div>
   );

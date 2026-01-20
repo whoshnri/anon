@@ -25,7 +25,7 @@ export default function Home() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-       formRef.current?.requestSubmit()
+      formRef.current?.requestSubmit()
     }
   };
 
@@ -42,113 +42,114 @@ export default function Home() {
     });
 
     const result = await res.json();
-    setStatus(result.result === "success" ? "[✅_Sent!]" : "[❌_failed_to_send]");
+    setStatus(result.result === "success" ? "Sent!" : "Failed to send");
     setSending(false)
     setData("");
     setTimeout(() => {
       setStatus("");
-      }, 3000);
+    }, 3000);
   };
 
   return (
-     <div className="relative xs:w-[90vw] xs:h-[90vh] bg-gray-900/95 h-[90vh] w-[90vw] mx-auto rounded-lg mt-[5vh] font-mono shadow-2xl border border-gray-700/50 overflow-hidden">
-      {/* Terminal top bar */}
-        <div className="p-4 rounded-t-lg flex gap-4 text-sm bg-gradient-to-r from-gray-800/80 to-gray-700/80 items-center border-b border-gray-600/30">
-          <div className="w-fit flex gap-2">
-            <div className="rounded-full bg-red-500 h-3 w-3 shadow-sm"></div>
-            <div className="rounded-full bg-yellow-500 h-3 w-3 shadow-sm"></div>
-            <div className="rounded-full bg-green-500 h-3 w-3 shadow-sm"></div>
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 md:p-8">
+      {/* Background Decorative Elements */}
+
+      <div className="relative w-full max-w-2xl glass-card-heavy sm:rounded-3xl shadow-2xl overflow-hidden border border-white/10">
+        {/* Modern top bar */}
+        <div className="px-6 py-4 flex justify-between items-center border-b border-white/5 bg-white/5">
+          <div className="flex gap-2">
+            <div className="h-2 w-2 rounded-full bg-white/20" />
+            <div className="h-2 w-2 rounded-full bg-white/10" />
+            <div className="h-2 w-2 rounded-full bg-white/5" />
           </div>
-          <span className="text-gray-300 font-medium">anonymous_messages.app</span>
+          <span className="text-[10px] md:text-xs font-mono tracking-widest text-white/40 uppercase">Welcome to AnonX</span>
+          <div className="text-[10px] font-mono text-brand-green/60 px-2 py-0.5 rounded-full border border-brand-green/20 bg-brand-green/5">
+            ONLINE
+          </div>
         </div>
 
-    {/*Hero*/}
-    <div className="pb-20 pb-8 overflow-y-auto h-[90%]">
-    <div className="pt-12 pb-8 ">
-        <div className="mx-auto w-fit mb-6">
-            <div className="bg-gradient-to-br from-green-400 to-emerald-500 p-4 rounded-full shadow-lg">
-                <UserX className="w-16 h-16 stroke-black"/>
+        <div className="p-6 md:p-10 space-y-12">
+          {/* Hero Section */}
+          <div className="text-center space-y-6">
+            <div className="inline-flex p-6 rounded-2xl bg-gradient-to-br from-brand-green/20 to-emerald-500/10 border border-brand-green/30 shadow-[0_0_40px_rgba(74,222,128,0.1)] relative group">
+              <div className="absolute inset-0 bg-brand-green/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100" />
+              <UserX className="w-12 h-12 md:w-16 md:h-16 text-brand-green relative z-10" />
             </div>
+
+            <div className="space-y-2">
+              <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white underline decoration-brand-green underline-offset-8">
+                Anon<span className="text-brand-green">X</span>
+              </h1>
+              <p className="text-gray-400 text-sm md:text-base max-w-sm mx-auto leading-relaxed pt-2">
+                Connect authentically through the power of anonymity.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
+            {/* Navigation Section */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-[0.2em] ml-2 font-mono">Go to</h3>
+              <div className="space-y-2">
+                {[
+                  { href: user ? `/users/${user}` : "/auth", label: user ? "View Profile" : "Get Started", icon: "→" },
+                  { href: "/auth", label: "Login / Register", icon: "•" },
+                  { href: "/legal", label: "Privacy & Terms", icon: "•" },
+                  { href: "/about", label: "About Creator", icon: "•" },
+                ].map((link, i) => (
+                  <Link
+                    key={link.href + i}
+                    href={link.href}
+                    className="flex items-center justify-between group px-5 py-4 rounded-xl bg-white/5 border border-white/5 hover:border-brand-green/30 hover:bg-brand-green/5 transition-all duration-300"
+                  >
+                    <span className="text-sm font-medium text-gray-300 group-hover:text-brand-green transition-colors">{link.label}</span>
+                    <span className="text-brand-green/50 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">{link.icon}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Feedback Form */}
+            <div className="space-y-4">
+              <h3 className="text-xs font-semibold text-white/40 uppercase tracking-[0.2em] ml-2 font-mono">Send Feedback</h3>
+              <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+                <div className="glass-card rounded-xl p-4 border border-white/10 focus-within:border-brand-green/30 transition-all">
+                  <textarea
+                    onKeyDown={handleKeyDown}
+                    required
+                    value={data}
+                    onChange={(e) => setData(e.target.value)}
+                    placeholder="Share your thoughts on the app..."
+                    className="w-full bg-transparent text-white text-sm placeholder-white/20 resize-none outline-none min-h-[100px]"
+                  />
+                  <div className="flex items-center justify-between mt-4">
+                    <span className="text-[10px] text-white/20 font-mono uppercase">Ctrl + Enter</span>
+                    <button
+                      type="submit"
+                      disabled={sending}
+                      className="inline-flex items-center justify-center px-6 py-2 rounded-full bg-brand-green text-bg-dark text-xs font-bold hover:bg-white hover:scale-105 transition-all disabled:opacity-50 disabled:scale-100"
+                    >
+                      {sending ? <span className="w-4 h-4 border-2 border-bg-dark/20 border-t-bg-dark rounded-full animate-spin" /> : "SEND"}
+                    </button>
+                  </div>
+                </div>
+                {status && (
+                  <div className={`text-center py-2 rounded-lg text-[10px] font-mono uppercase tracking-widest ${status.toLowerCase().includes('failed') ? 'bg-red-500/10 text-red-400' : 'bg-brand-green/10 text-brand-green'}`}>
+                    {status}
+                  </div>
+                )}
+              </form>
+            </div>
+          </div>
         </div>
-        <p className="text-green-400 text-lg cd:text-2xl mx-auto w-fit font-bold tracking-wide">[get_messages_anonymously]</p>
-        <p className="text-gray-400 text-sm mx-auto w-fit mt-2 max-w-md text-center">
-            Share thoughts without revealing identity. Connect authentically.
-        </p>
+
+        {/* Footer info */}
+        <div className="px-10 py-6 border-t border-white/5 bg-white/5 flex items-center justify-center">
+          <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-mono">
+            Build Trust • Stay Anonymous • Connect
+          </p>
+        </div>
+      </div>
     </div>
-
-    <div className="w-[85%] mx-auto mt-8 bg-gray-800/50 rounded-lg p-6 border border-gray-700/30">
-        <p className="text-green-400 uppercase font-semibold mb-4 text-sm tracking-wider">[Navigate to]</p>
-        <div className="space-y-3">
-            <div className="flex items-center group">
-                <span className="text-green-500 mr-3">├─</span>
-                {loading ? <span className="w-3 h-3 border border-t-transparent border-green-400 rounded-full animate-spin"></span> : <Link href={user ? `/users/${user}` : "/auth"} className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">[my_console]</Link>}
-
-            </div>
-             <div className="flex items-center group">
-                <span className="text-green-500 mr-3">├─</span>
-                <Link href="/auth" className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">
-                    [login/signup]
-                </Link>
-            </div>
-            <div className="flex items-center group">
-                <span className="text-green-500 mr-3">├─</span>
-                <Link href="/legal" className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">
-                    [legal_stuff]
-                </Link>
-            </div>
-            <div className="flex items-center group">
-                <span className="text-green-500 mr-3">└─</span>
-                <Link href="/about" className="text-green-400 hover:text-green-300 transition-colors duration-200 text-sm font-medium">
-                    [about_creator]
-                </Link>
-            </div>
-        </div>
-    </div>
-
-    {/* Feedback Form */}
-    <form ref={formRef} onSubmit={handleSubmit} className="w-[85%] mx-auto mt-6 bg-gray-800/50 rounded-lg p-4 border border-gray-700/30">
-        <div className="flex items-center gap-2 mb-2">
-            <span className="text-green-400 text-sm">guest@anonymous:~$</span>
-            <span className="text-gray-400 text-sm">[send_feedback]</span>
-        </div>
-        <div className="bg-black/30 rounded border border-gray-600/30 p-3">
-            <textarea
-                onKeyDown={handleKeyDown}
-                required
-                value={data}
-                onChange={(e) => setData(e.target.value)}
-                placeholder="type your anonymous message here..."
-                className="w-full bg-transparent text-green-400 text-sm placeholder-gray-600 resize-none outline-none font-mono"
-                rows={3}
-            />
-            <div className="flex items-center justify-between mt-2">
-                <span className="text-gray-600 text-xs">press ctrl+enter to send</span>
-                <button
-              type="submit"
-              disabled={sending}
-              className={`flex items-center justify-center text-green-400 hover:text-green-300 text-xs bg-gray-700/50 px-3 py-1 rounded border border-gray-600/30 transition-colors ${
-                sending ? "opacity-70 cursor-not-allowed" : "cursor-pointer"
-              }`}
-            >
-              {sending ? (
-                <span className="w-4 h-4 border-2 border-t-transparent border-green-400 rounded-full animate-spin" />
-              ) : (
-                "[send]"
-              )}
-            </button>
-
-            </div>
-        </div>
-        <p className="text-xs mx-auto text-green-400 mt-4 w-fit">{status}</p>
-    </form>
-    </div>
-
-
-    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-        <p className="text-gray-500 text-xs uppercase mx-auto w-fit bg-gray-800/70 px-4 py-2 rounded-full border border-gray-700/30">
-            [did_you_know?] : [anonymous_feedback_builds_trust]
-        </p>
-    </div>
-   </div>
   );
 }
