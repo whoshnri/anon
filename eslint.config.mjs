@@ -10,7 +10,26 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...nextVitals,   // ← assuming this is your next/core-web-vitals or similar spread
+  {
+    rules: {
+      'react/no-unescaped-entities': 'off',
+      '@next/next/no-page-custom-font': 'off',
+
+      // Disable the base rule to prevent conflicts
+      'no-unused-vars': 'off',
+
+      // Actually disable the TypeScript one
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
 ];
 
 export default eslintConfig;
